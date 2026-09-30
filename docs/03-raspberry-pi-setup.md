@@ -18,7 +18,8 @@
 
 1. **OS:** Raspberry Pi OS Lite 64-bit (Bookworm or newer), SSH on, hostname `tuba-pi`.
 2. **Access:** install Tailscale (`curl -fsSL https://tailscale.com/install.sh | sh && sudo tailscale up --ssh`),
-   add the Termius public key to `~/.ssh/authorized_keys`.
+   and set up the browser terminal for the iOS 16 phone: `ttyd` bound to the
+   Tailscale interface with a login (`ttyd -i tailscale0 -c user:pass -W bash`) as a systemd service.
 3. **Clone this repo** with `--recurse-submodules` (see README).
 4. **Zephyr toolchain:** Python venv, `pip install west`, `west init`/`west update`
    for the Zephyr version tuba uses (4.3), Zephyr SDK for Xtensa ESP32,

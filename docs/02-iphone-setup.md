@@ -12,7 +12,7 @@ You need **no custom app**. Everything below uses App Store apps and iOS setting
 |---|---|---|
 | **Telegram** | Required | Chat with the glider bot (text, dictation, voice messages) |
 | **Tailscale** | Strongly recommended | Private VPN to reach the Pi from anywhere without opening ports |
-| **Termius** (or Blink Shell) | Recommended | SSH into the Pi over Tailscale: emergency access if the bot/agent is down |
+| SSH client (see §6) | Recommended | Emergency access to the Pi over Tailscale if the bot/agent is down |
 | **GitHub** | Optional | Review the agent's branches/diffs/commits on a bigger view |
 
 ## 2. Telegram account hardening
@@ -68,11 +68,26 @@ Don't message the bot yet. Nothing is listening until the Pi is running.
 2. Leave it off until the Pi joins the tailnet; then you can `ssh pi@<pi-name>`
    from Termius even when the Pi is behind a 4G modem's NAT.
 
-## 6. Termius
+## 6. Emergency SSH access to the Pi
 
-1. Install, create a new host later with the Pi's Tailscale name/IP.
-2. Generate an SSH key in Termius (Keychain → Generate key, ed25519) and later
-   add its public key to `~/.ssh/authorized_keys` on the Pi.
+Termius needs iOS 17+. This project assumes the iPhone may be stuck on
+**iOS 16.7**, so use one of these instead (check "Compatibility" on each App Store page):
+
+1. **Browser terminal, no app needed (recommended).** The Pi runs `ttyd`
+   (a web terminal), reachable only over Tailscale, e.g. `http://tuba-pi:7681`
+   in Safari. Protect it with a login (`ttyd -c user:pass`) and bind it to the
+   Tailscale interface only. Set up in the Pi phase.
+2. **Tailscale SSH console:** from Safari, log in to the Tailscale admin console
+   (login.tailscale.com) → Machines → `tuba-pi` → **SSH**. Needs `tailscale up --ssh`
+   on the Pi. Also no app.
+3. **An SSH app that still supports iOS 16**, e.g. **a-Shell** (free, has `ssh`),
+   Blink Shell, or Prompt 3. Check the minimum iOS version before buying.
+4. **Older Termius build:** if Termius was ever downloaded with your Apple ID
+   (e.g. on a newer device: "Get" it there), the old iPhone's App Store offers to
+   *"download the last compatible version"* from Account → Purchased.
+
+The Telegram bot will also get a few safe maintenance commands (`/status`,
+`/restart_agent`, `/logs`), so SSH is only needed when the agent itself is broken.
 
 ## 7. Field considerations
 
@@ -93,7 +108,7 @@ Don't message the bot yet. Nothing is listening until the Pi is running.
 - [ ] Bot group-joining disabled
 - [ ] Dictation enabled and/or Telegram mic permission granted
 - [ ] Tailscale installed and signed in
-- [ ] Termius installed, SSH key generated
+- [ ] Emergency SSH path chosen (browser terminal / Tailscale console / a-Shell)
 - [ ] (Optional) GitHub app signed in
 
 Next: [03-raspberry-pi-setup.md](03-raspberry-pi-setup.md)
