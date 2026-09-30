@@ -25,15 +25,38 @@ to the glider without an explicit "YES" from you on Telegram.
 
 | Component | State |
 |---|---|
-| iPhone | ▶ **Current step** – see [docs/02-iphone-setup.md](docs/02-iphone-setup.md) |
-| Raspberry Pi base setup | Next – [docs/03-raspberry-pi-setup.md](docs/03-raspberry-pi-setup.md) |
+| Project repo, docs, design | ✅ Done (this repo) |
+| iPhone | ▶ **In progress**: see [docs/02-iphone-setup.md](docs/02-iphone-setup.md) |
+| Raspberry Pi base setup | Next: [docs/03-raspberry-pi-setup.md](docs/03-raspberry-pi-setup.md) |
 | Manual OTA from the Pi (no AI) | To do |
-| Firmware hardening (rollback, security) | To do – [docs/04-firmware-hardening.md](docs/04-firmware-hardening.md) |
+| Firmware hardening (rollback, security) | To do: [docs/04-firmware-hardening.md](docs/04-firmware-hardening.md) |
 | AI build/test loop on bench twin | To do |
 | Telegram agent + approval gate | To do |
-| Field operations | To do – [docs/05-field-operations.md](docs/05-field-operations.md) |
+| Siri voice bridge (hands-free) | To do (design in [docs/02-iphone-setup.md](docs/02-iphone-setup.md) §4C) |
+| Field operations | To do: [docs/05-field-operations.md](docs/05-field-operations.md) |
 
 The full checklist is in [ROADMAP.md](ROADMAP.md).
+
+## Where we left off
+
+- **Decisions so far**
+  - Hands-free voice is the primary input: *"Hey Siri, glider"* → Shortcut → Pi voice
+    bridge over Tailscale. Telegram is the log, the diff viewer and the backup input.
+  - Pushing to the glider needs a spoken per-build challenge ("approve 1 4 3 tango")
+    or YES on Telegram.
+  - IOS-Keyboard is not used. tuba-firmware and Embedded-AI-Harness are submodules;
+    fork Embedded-AI-Harness when we first change it.
+- **Constraints discovered**
+  - The pilot's iPhone is on **iOS 16.7** (the latest it supports): no Termius (needs iOS 17),
+    and the wake phrase must be "Hey Siri". Emergency SSH goes through a `ttyd` browser terminal,
+    the Tailscale web SSH console, or a-Shell.
+  - tuba-firmware OTA is **permanent (no rollback)**, uses the **default MCUboot signing
+    key**, and has open Wi-Fi + unauthenticated telnet. Fix before any field OTA.
+- **Next steps**
+  1. Finish the iPhone checklist (Telegram hardening, BotFather bot + user ID,
+     "Hey Siri", Tailscale). Shortcuts are built later, once the voice bridge exists.
+  2. Get the Pi hardware (Pi 5, second USB Wi-Fi adapter + antenna, spare ESP32 DevKitC twin).
+  3. On the Pi: clone this repo and follow `docs/03-raspberry-pi-setup.md`.
 
 ## Getting started on the Raspberry Pi
 

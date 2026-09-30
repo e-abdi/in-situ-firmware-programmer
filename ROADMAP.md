@@ -1,5 +1,8 @@
 # Roadmap
 
+## Done
+- [x] Project repo, architecture, docs, submodules, hands-free (Siri) design
+
 ## Phase 0: iPhone ([guide](docs/02-iphone-setup.md))
 - [ ] Telegram + 2-step verification + passcode
 - [ ] Bot created via @BotFather; token and own user ID saved
