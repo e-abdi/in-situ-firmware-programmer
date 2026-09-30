@@ -11,7 +11,7 @@ Telegram bot from an iPhone, **hands-free with Siri**.
                             ├─ AI agent (Hermes Agent or OpenClaw) with Telegram gateway
                             ├─ edits tuba-firmware, builds it (Zephyr + west)
                             ├─ tests it on a bench "twin" ESP32 (Embedded-AI-Harness)
-                            ├─ asks you to approve on Telegram
+                            ├─ asks you to approve (spoken challenge or Telegram)
                             └─ at surfacing: joins glider Wi-Fi → telnet → OTA over HTTP
                                                                │
                                                        Glider ESP32 (MCUboot)
