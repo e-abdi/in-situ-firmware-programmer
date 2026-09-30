@@ -66,7 +66,7 @@ Don't message the bot yet. Nothing is listening until the Pi is running.
 1. Install Tailscale, sign in (GitHub/Google/Apple account). Use the **same
    Tailscale account** later on the Pi.
 2. Leave it off until the Pi joins the tailnet; then you can `ssh pi@<pi-name>`
-   from Termius even when the Pi is behind a 4G modem's NAT.
+   from Safari (browser terminal), a-Shell, or another SSH app even when the Pi is behind a 4G modem's NAT.
 
 ## 6. Emergency SSH access to the Pi
 
