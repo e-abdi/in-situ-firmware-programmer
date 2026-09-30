@@ -1,0 +1,6 @@
+[submodule "firmware/tuba-firmware"]
+	path = firmware/tuba-firmware
+	url = https://github.com/e-abdi/tuba-firmware.git
+[submodule "third_party/Embedded-AI-Harness"]
+	path = third_party/Embedded-AI-Harness
+	url = https://github.com/SensorsIot/Embedded-AI-Harness.git

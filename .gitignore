@@ -1,0 +1,13 @@
+# Secrets
+.env
+*.pem
+*.key
+keys/
+
+# Build / runtime
+build/
+__pycache__/
+*.pyc
+.venv/
+logs/
+*.log
