@@ -38,6 +38,10 @@
     an LLM provider (API key in `.env`).
 11. **Agent tools:** expose `build`, `test_on_twin`, `glider_status`, `ota_push`
     (needs approval), `rollback`, and `revert_commit` as scripts/skills in `agent/`.
-12. **systemd services:** agent gateway, OTA HTTP server, surfacing watcher.
+12. **Voice bridge** for hands-free Siri use: small HTTP service (e.g. FastAPI) on
+    `tailscale0:8088` with `/voice`, `/status`, `/approve`, `/cancel`, bearer-token auth
+    (`VOICE_BRIDGE_TOKEN`), which forwards to the agent and mirrors everything to Telegram.
+    See `docs/02-iphone-setup.md` §4C.
+13. **systemd services:** agent gateway, voice bridge, OTA HTTP server, surfacing watcher.
 
 Details are written up here as each step is done on the Pi.

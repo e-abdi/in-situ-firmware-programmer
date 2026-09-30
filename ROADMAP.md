@@ -4,6 +4,7 @@
 - [ ] Telegram + 2-step verification + passcode
 - [ ] Bot created via @BotFather; token and own user ID saved
 - [ ] Dictation / voice message permissions
+- [ ] "Hey Siri" + Allow When Locked; AirPods; Tailscale VPN On Demand
 - [ ] Tailscale installed; emergency SSH path chosen (iPhone is on iOS 16.7, no Termius)
 
 ## Phase 1: Raspberry Pi base ([guide](docs/03-raspberry-pi-setup.md))
@@ -34,6 +35,9 @@
 - [ ] Hermes Agent or OpenClaw installed, Telegram gateway restricted to own user ID
 - [ ] Whisper transcription of voice messages, echoed back
 - [ ] Approval gate: exact "YES" per version before `ota_push`
+- [ ] Voice bridge on the Pi (`/voice`, `/status`, `/approve`, `/cancel`), Tailscale-only, token auth, mirrored to Telegram
+- [ ] Spoken approval challenge (version + random word, expiring, hash-bound)
+- [ ] Siri Shortcuts built on the iPhone and tested with the phone locked
 - [ ] systemd services; survives reboot
 
 ## Phase 6: Field

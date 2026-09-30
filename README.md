@@ -1,12 +1,13 @@
 # In-Situ Firmware Programmer
 
 Reprogram the **Tuba underwater glider** while it is deployed, by talking to a
-Telegram bot from an iPhone.
+Telegram bot from an iPhone, **hands-free with Siri**.
 
 ```
- "Increase max dive depth to 80 m"          (voice or dictated text)
+ "Hey Siri, glider" → "Increase max dive depth to 80 m"     (hands-free)
         │
-   iPhone ── Telegram ──► Raspberry Pi (boat / shore station)
+   iPhone ── Siri Shortcut (HTTPS over Tailscale) ─┐
+          └─ Telegram (log, diffs, backup input) ──┴► Raspberry Pi (boat / shore station)
                             ├─ AI agent (Hermes Agent or OpenClaw) with Telegram gateway
                             ├─ edits tuba-firmware, builds it (Zephyr + west)
                             ├─ tests it on a bench "twin" ESP32 (Embedded-AI-Harness)

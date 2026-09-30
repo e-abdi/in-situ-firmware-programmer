@@ -42,7 +42,9 @@ like a root password.
 
 Don't message the bot yet. Nothing is listening until the Pi is running.
 
-## 4. Voice input: pick one (you can use both)
+## 4. Voice input
+
+A and B need the screen; **C is hands-free** and is the main mode. Keep A/B as backups.
 
 ### Option A: iOS dictation into Telegram (simplest)
 - Settings → General → Keyboard → **Enable Dictation** = on.
@@ -56,16 +58,65 @@ Don't message the bot yet. Nothing is listening until the Pi is running.
 - Better with gloves on a boat, and gives you a record of the exact request.
 - Settings → Privacy → Microphone → Telegram = on.
 
-### Optional: Siri, hands-free
-- iOS Shortcuts + Telegram's Siri integration can send a message to a chat
-  ("Hey Siri, send a Telegram to Tuba Glider…"). Support for sending to *bots*
-  varies between iOS/Telegram versions; test it, and don't rely on it.
+### Option C: Siri, hands-free (primary mode)
+
+Goal: operate without touching the phone. Siri **cannot send messages *to* a
+Telegram bot** reliably, and a bot never receives messages it sent itself. So the
+hands-free path goes **Siri → Shortcuts → HTTPS request to the Pi over Tailscale**.
+The Pi then posts the request and all replies into the Telegram chat, so Telegram
+stays the single log and the place to review diffs when you *can* look at the screen.
+
+```
+"Hey Siri, glider"  →  Siri: "What should I change?"  →  you speak
+   → Shortcut POSTs text to http://tuba-pi:8088/voice   (Tailscale only, bearer token)
+   → Pi: posts "🎙 via Siri: …" to Telegram, starts the agent
+   → Siri speaks the Pi's short reply: "Understood: pump timeout 120 s. Building, I'll report."
+```
+
+#### iOS settings (iOS 16.7)
+- Settings → Siri & Search → **Listen for "Hey Siri"** = on (train your voice;
+  plain "Siri" without "Hey" needs iOS 17).
+- Settings → Siri & Search → **Allow Siri When Locked** = on.
+- Settings → Siri & Search → **Siri Responses** → *Always* speak responses.
+- **AirPods or a Bluetooth headset** strongly recommended on a noisy boat
+  (AirPods 2nd gen+/Pro support "Hey Siri").
+- Tailscale must be connected all the time: Tailscale app → settings → turn on
+  **VPN On Demand** (or leave the VPN toggled on).
+- Some Shortcut actions require unlocking a locked phone. Test with the phone locked;
+  if it asks for Face ID/passcode, consider Settings → Face ID & Passcode →
+  Auto-Lock timing during operations, or use "Require attention" off.
+
+#### Shortcuts to create (Shortcuts app; built in on iOS 16)
+Create these once the Pi's voice bridge is running (Pi phase). The shortcut
+**name is the Siri phrase**.
+
+| Shortcut name ("Hey Siri, …") | Actions |
+|---|---|
+| **Glider** | *Dictate Text* (stop listening: After Pause) → *Get Contents of URL* `http://tuba-pi:8088/voice`, Method POST, Header `Authorization: Bearer <VOICE_BRIDGE_TOKEN>`, JSON body `{"text": <Dictated Text>}` → *Get Dictionary Value* `say` → *Speak Text* |
+| **Glider status** | *Get Contents of URL* `http://tuba-pi:8088/status` (same header) → *Get Dictionary Value* `say` → *Speak Text* |
+| **Glider approve** | *Dictate Text* → POST to `/approve` with `{"text": …}` → *Speak Text* the reply |
+| **Glider cancel** | POST to `/cancel` → *Speak Text* the reply |
+
+#### Hands-free approval: safety design
+Voice approval to reflash a vehicle has to be harder to trigger by accident than a tap:
+- The Pi reads out a **one-time challenge**, e.g. *"Version 1.4.3 passed 11 of 11 tests.
+  To push, say: approve 1 4 3 tango."* ("tango" is a random word chosen per build).
+- "Glider approve" must repeat both the version and the word; anything else = rejected.
+- Approval expires (e.g. 30 min) and is valid for that exact git hash only.
+- Everything is mirrored to Telegram; a Telegram `/cancel` always wins.
+
+#### Hearing replies without touching the phone
+- Each shortcut speaks the Pi's short `say` text.
+- Progress updates ("build done", "glider surfaced, pushing", "confirmed") arrive as
+  Telegram notifications. With AirPods, Settings → Notifications → **Announce
+  Notifications** can read them aloud, if Telegram supports it on your iOS/Telegram version
+  (test it). Otherwise just ask "Hey Siri, glider status".
 
 ## 5. Tailscale (remote access to the Pi)
 
 1. Install Tailscale, sign in (GitHub/Google/Apple account). Use the **same
    Tailscale account** later on the Pi.
-2. Leave it off until the Pi joins the tailnet; then you can `ssh pi@<pi-name>`
+2. Keep it connected (VPN On Demand), because the Siri shortcuts need it. Once the Pi joins the tailnet, you can `ssh pi@<pi-name>`
    from Safari (browser terminal), a-Shell, or another SSH app even when the Pi is behind a 4G modem's NAT.
 
 ## 6. Emergency SSH access to the Pi
@@ -107,6 +158,9 @@ The Telegram bot will also get a few safe maintenance commands (`/status`,
 - [ ] Bot created; **token** and **your user ID** saved securely
 - [ ] Bot group-joining disabled
 - [ ] Dictation enabled and/or Telegram mic permission granted
+- [ ] "Hey Siri" trained, Allow Siri When Locked on, Siri always speaks responses
+- [ ] (Recommended) AirPods/Bluetooth headset paired
+- [ ] Siri shortcuts created (after the Pi voice bridge exists)
 - [ ] Tailscale installed and signed in
 - [ ] Emergency SSH path chosen (browser terminal / Tailscale console / a-Shell)
 - [ ] (Optional) GitHub app signed in
